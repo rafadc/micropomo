@@ -4,7 +4,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func manageKeys(msg tea.KeyMsg, m model) (tea.Model, tea.Cmd) {
+func manageKeys(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "q", "esc", "ctrl+c":
 		return m, tea.Quit

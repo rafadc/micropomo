@@ -3,8 +3,11 @@ package micropomo
 import (
 	"fmt"
 
+	"github.com/charmbracelet/bubbles/progress"
 	"github.com/charmbracelet/lipgloss"
 )
+
+var gradient = progress.WithScaledGradient("#FEEAEA", "#F03030")
 
 func (m model) View() string {
 	if m.clockStatus == Finishing {

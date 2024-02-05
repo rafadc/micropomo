@@ -30,7 +30,7 @@ func InitialModel(minutes uint) model {
 		elapsedTime: 0,
 		maxTime:     minutes * 60,
 		clockStatus: Stopped,
-		progress:    progress.New(progress.WithDefaultGradient()),
+		progress:    progress.New(gradient),
 	}
 }
 
@@ -47,24 +47,10 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		return manageKeys(msg, m)
+		return manageKeys(m, msg)
 
 	case TickMsg:
-		switch m.clockStatus {
-		case Running:
-			m.elapsedTime++
-			progressCmd := m.progress.SetPercent(float64(m.elapsedTime) / float64(m.maxTime))
-			if m.elapsedTime >= m.maxTime {
-				m.clockStatus = Finishing
-			}
-			return m, tea.Batch(tickEvery(), progressCmd)
-		case Finishing:
-			m.elapsedTime++
-			if m.elapsedTime >= m.maxTime+5 {
-				return m.resetClock(), tickEvery()
-			}
-		}
-		return m, tickEvery()
+		return m.tick()
 
 	case progress.FrameMsg:
 		progressModel, cmd := m.progress.Update(msg)
@@ -78,6 +64,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) resetClock() tea.Model {
 	m.elapsedTime = 0
 	m.clockStatus = Stopped
-	m.progress = progress.New(progress.WithDefaultGradient())
+	m.progress = progress.New(gradient)
 	return m
+}
+
+func (m model) tick() (tea.Model, tea.Cmd) {
+	switch m.clockStatus {
+	case Running:
+		m.elapsedTime++
+		progressCmd := m.progress.SetPercent(float64(m.elapsedTime) / float64(m.maxTime))
+		if m.elapsedTime >= m.maxTime {
+			m.clockStatus = Finishing
+		}
+		return m, tea.Batch(tickEvery(), progressCmd)
+	case Finishing:
+		m.elapsedTime++
+		if m.elapsedTime >= m.maxTime+10 {
+			return m.resetClock(), tickEvery()
+		}
+	}
+	return m, tickEvery()
 }
