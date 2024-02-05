@@ -11,7 +11,7 @@ func (m model) View() string {
 	return s
 }
 
-func formatTime(t int) string {
+func formatTime(t uint) string {
 	minutes := t / 60
 	seconds := t % 60
 	return fmt.Sprintf("%02d:%02d", minutes, seconds)

@@ -8,8 +8,8 @@ import (
 )
 
 type model struct {
-	elapsedTime int
-	maxTime     int
+	elapsedTime uint
+	maxTime     uint
 	clockStatus Status
 	progress    progress.Model
 }
@@ -25,10 +25,10 @@ const (
 
 type TickMsg time.Time
 
-func InitialModel() model {
+func InitialModel(minutes uint) model {
 	return model{
 		elapsedTime: 0,
-		maxTime:     25 * 60,
+		maxTime:     minutes * 60,
 		clockStatus: Stopped,
 		progress:    progress.New(progress.WithDefaultGradient()),
 	}
@@ -74,5 +74,3 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	return m, nil
 }
-
-
