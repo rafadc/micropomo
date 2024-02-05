@@ -9,8 +9,7 @@ func manageKeys(msg tea.KeyMsg, m model) (tea.Model, tea.Cmd) {
 	case "q", "esc", "ctrl+c":
 		return m, tea.Quit
 	case "r":
-		m.clockStatus = Stopped
-		m.elapsedTime = 0
+		return m.resetClock(), nil
 	case " ":
 		switch m.clockStatus {
 		case Running:

@@ -2,11 +2,19 @@ package micropomo
 
 import (
 	"fmt"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 func (m model) View() string {
+	if m.clockStatus == Finishing {
+		style := lipgloss.NewStyle().
+		  BorderStyle(lipgloss.NormalBorder()).
+		  BorderForeground(lipgloss.Color("63"))
+		return style.Render("🎉  Time's up! 🎉")
+	}
 	s := fmt.Sprintf("%s ", m.statusIcon())
-	s	+= fmt.Sprintf("%s - %s\n", formatTime(m.elapsedTime), formatTime(m.maxTime))
+	s += fmt.Sprintf("%s - %s\n", formatTime(m.elapsedTime), formatTime(m.maxTime))
 	s += m.progress.View()
 	return s
 }

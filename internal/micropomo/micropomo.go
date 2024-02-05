@@ -61,7 +61,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case Finishing:
 			m.elapsedTime++
 			if m.elapsedTime >= m.maxTime+5 {
-				m.clockStatus = Stopped
+				return m.resetClock(), tickEvery()
 			}
 		}
 		return m, tickEvery()
@@ -73,4 +73,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return m, nil
+}
+
+func (m model) resetClock() tea.Model {
+	m.elapsedTime = 0
+	m.clockStatus = Stopped
+	m.progress = progress.New(progress.WithDefaultGradient())
+	return m
 }
