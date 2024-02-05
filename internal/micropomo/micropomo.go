@@ -1,7 +1,6 @@
 package micropomo
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/charmbracelet/bubbles/progress"
@@ -48,21 +47,8 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "q", "esc", "ctrl+c":
-			return m, tea.Quit
-		case "r":
-			m = InitialModel()
-		case " ":
-			switch m.clockStatus {
-			case Running:
-				m.clockStatus = Paused
-			case Paused:
-				m.clockStatus = Running
-			case Stopped:
-				m.clockStatus = Running
-			}
-		}
+		return manageKeys(msg, m)
+
 	case TickMsg:
 		switch m.clockStatus {
 		case Running:
@@ -89,8 +75,4 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) View() string {
-	s := fmt.Sprintf("Elapsed time: %d - Max time: %d\n", m.elapsedTime, m.maxTime)
-	s += m.progress.View()
-	return s
-}
+
