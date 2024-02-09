@@ -7,13 +7,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var gradient = progress.WithScaledGradient("#FEEAEA", "#F03030")
+var gradient = progress.WithScaledGradient("#FF4444", "#FF0000")
 
 func (m model) View() string {
 	if m.clockStatus == Finishing {
 		style := lipgloss.NewStyle().
-		  BorderStyle(lipgloss.NormalBorder()).
-		  BorderForeground(lipgloss.Color("63"))
+			BorderStyle(lipgloss.NormalBorder()).
+			BorderForeground(lipgloss.Color("63"))
 		return style.Render("🎉  Time's up! 🎉")
 	}
 	s := fmt.Sprintf("%s ", m.statusIcon())
